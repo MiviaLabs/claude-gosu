@@ -9,7 +9,11 @@ The plan command performs thorough feature analysis and creates detailed impleme
 ## Usage
 
 ```bash
+# With feature description
 claude gosu:plan "feature description"
+
+# Interactive mode (prompts for feature details)
+claude gosu:plan
 ```
 
 ### Examples
@@ -26,6 +30,9 @@ claude gosu:plan "advanced search functionality with filters and autocomplete"
 
 # Complex integrations
 claude gosu:plan "payment processing system with multiple providers"
+
+# Interactive mode for complex requirements
+claude gosu:plan
 ```
 
 ## What It Does

@@ -9,10 +9,10 @@ The work command provides seamless task resumption across AI sessions. It allows
 ## Usage
 
 ```bash
-# Interactive task selection
+# Interactive task selection (lists all available tasks)
 claude gosu:work
 
-# Resume specific task file
+# Resume specific task file directly
 claude gosu:work plan-20240712_143022.md
 claude gosu:work review-20240712_151045.md  
 claude gosu:work security-20240712_160315.md

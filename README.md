@@ -30,6 +30,8 @@ claude gosu:init
 
 # Feature planning and implementation
 claude gosu:plan "user profile management with avatar upload"
+# OR interactive mode
+claude gosu:plan
 
 # Code quality review
 claude gosu:review
@@ -39,6 +41,8 @@ claude gosu:security
 
 # Resume any saved task
 claude gosu:work
+# OR resume specific task
+claude gosu:work plan-20240712_143022.md
 ```
 
 ## Key Features

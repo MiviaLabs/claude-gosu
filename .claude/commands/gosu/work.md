@@ -5,6 +5,8 @@
 gosu:work [filename]
 ```
 
+**Target File:** $ARGUMENTS
+
 ## Description
 Resume work on a previously saved task from the `.gosu` directory. If no filename is provided, lists available tasks and asks user to choose.
 
@@ -37,30 +39,31 @@ fi
 
 #### If filename parameter is provided:
 ```bash
-# Validate file exists in .gosu directory
-WORK_FILE=".gosu/$1"
-if [ ! -f "$WORK_FILE" ]; then
-  echo "L File not found: $WORK_FILE"
-  echo "Available files:"
-  ls -la .gosu/*.md 2>/dev/null || echo "No task files found in .gosu directory"
-  exit 1
-fi
-
-echo "=� Resuming work on: $WORK_FILE"
+# Use $ARGUMENTS for filename
+if [ -n "$ARGUMENTS" ]; then
+  WORK_FILE=".gosu/$ARGUMENTS"
+  if [ ! -f "$WORK_FILE" ]; then
+    echo "❌ File not found: $WORK_FILE"
+    echo "Available files:"
+    ls -la .gosu/*.md 2>/dev/null || echo "No task files found in .gosu directory"
+    exit 1
+  fi
+  echo "🔄 Resuming work on: $WORK_FILE"
 ```
 
 #### If no parameter provided:
 ```bash
-# List available task files
-echo "=� Available task files in .gosu directory:"
-echo ""
+else
+  # List available task files
+  echo "📋 Available task files in .gosu directory:"
+  echo ""
 
-TASK_FILES=($(ls .gosu/*.md 2>/dev/null))
-if [ ${#TASK_FILES[@]} -eq 0 ]; then
-  echo "L No task files found in .gosu directory"
-  echo "=� Create a task first using: gosu:plan, gosu:review, or gosu:security"
-  exit 1
-fi
+  TASK_FILES=($(ls .gosu/*.md 2>/dev/null))
+  if [ ${#TASK_FILES[@]} -eq 0 ]; then
+    echo "❌ No task files found in .gosu directory"
+    echo "📝 Create a task first using: gosu:plan, gosu:review, or gosu:security"
+    exit 1
+  fi
 
 # Display numbered list
 for i in "${!TASK_FILES[@]}"; do
@@ -80,7 +83,8 @@ for i in "${!TASK_FILES[@]}"; do
   echo ""
 done
 
-echo "Enter the number of the task you want to work on (1-${#TASK_FILES[@]}):"
+  echo "Enter the number of the task you want to work on (1-${#TASK_FILES[@]}):"
+fi
 ```
 
 ### Step 3: Task Resume Logic

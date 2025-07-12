@@ -5,15 +5,20 @@ Perform comprehensive feature planning as an expert software architect and proje
 ## Command Usage
 
 ```bash
-claude gosu:plan <feature_description>
+claude gosu:plan [feature_description]
 ```
 
-**Example:**
+**Feature Description:** $ARGUMENTS
+
+**Examples:**
 ```bash
 claude gosu:plan "user profile management with avatar upload and privacy settings"
 claude gosu:plan "real-time chat system with message history and file sharing"
 claude gosu:plan "advanced search functionality with filters and autocomplete"
+claude gosu:plan
 ```
+
+**Note:** If no feature description is provided, the command will prompt for feature requirements interactively.
 
 ## Phase 1: Technology Stack Detection & Codebase Analysis
 
@@ -72,6 +77,27 @@ Use Task tool to analyze patterns specific to detected technology:
 - **Build & Deployment**: CI/CD patterns and deployment strategies
 
 ## Phase 2: Feature Requirements Analysis
+
+### Handle Feature Input
+**FIRST**: Determine if feature description was provided:
+
+```bash
+if [ -z "$ARGUMENTS" ]; then
+  echo "🎯 Feature Planning Session"
+  echo ""
+  echo "Please describe the feature you want to plan and implement:"
+  echo "- What functionality should it provide?"
+  echo "- Who are the intended users?"
+  echo "- Any specific requirements or constraints?"
+  echo ""
+  echo "Example: 'user profile management with avatar upload and privacy settings'"
+  echo ""
+  read -p "Feature Description: " FEATURE_DESC
+else
+  FEATURE_DESC="$ARGUMENTS"
+  echo "🎯 Planning Feature: $FEATURE_DESC"
+fi
+```
 
 ### Deep Feature Understanding
 **ULTRATHINK** the feature request by considering:
