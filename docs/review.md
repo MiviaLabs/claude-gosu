@@ -108,6 +108,42 @@ For large codebases with many quality issues, the command automatically deploys 
 - **Issue Type Diversity**: Mix of architecture, performance, testing, and style issues
 - **Complexity Variation**: Mix of simple style fixes and complex architectural changes
 
+## Persistent Task Management
+
+### Review File Creation & Storage
+If you've run `gosu:init` to initialize the workspace, your code reviews are automatically saved for later resumption:
+
+```bash
+# Review is saved to .gosu directory
+.gosu/review-20240712_151045.md
+
+# Contains complete review with:
+- Executive summary and quality metrics
+- Detailed findings by priority level
+- File-by-file analysis with line references
+- Technology-specific recommendations
+- Real-time fix progress tracking
+```
+
+### Integration with gosu:work
+Resume code quality improvements across sessions:
+
+```bash
+# Resume saved review
+claude gosu:work review-20240712_151045.md
+
+# Or select interactively
+claude gosu:work
+# > 2. review-20240712_151045.md (Implementation In Progress - 5/15 issues fixed)
+```
+
+### Progress Tracking
+Review files automatically track fix progress:
+- **Checkbox states**: `[x]` fixed, `[ ]` pending
+- **Priority tracking**: Progress within each priority level
+- **Timestamps**: When issues were resolved
+- **Quality improvements**: Before/after quality score
+
 ## Command Options
 
 After the code review analysis, you'll be prompted with:
@@ -116,6 +152,7 @@ After the code review analysis, you'll be prompted with:
 📋 CODE REVIEW COMPLETE
 
 Code Quality Score: B+
+Review File: .gosu/review-20240712_151045.md (if workspace initialized)
 Reviewing 8 modified files
 
 Found 23 code quality issues:
@@ -123,13 +160,15 @@ Found 23 code quality issues:
 - 12 Medium priority issues (fix this sprint)
 - 8 Low priority issues (fix when possible)
 
-Would you like me to proceed with implementing fixes?
+Would you like me to proceed with implementing fixes for the code quality issues found?
 
 Options:
-1. Yes - Create todo list and begin implementing high priority fixes
-2. No - Stop here, review only
+1. Yes - Follow the saved review and begin implementing high priority fixes
+2. No - Stop here, review only (review saved for later use with gosu:work)
 3. Selective - Let me choose which issues to fix
 4. High Priority Only - Fix only critical issues
+5. Modify Review - Adjust the findings and update the saved file
+6. Cancel Review - Delete the review file and stop
 ```
 
 ## Output Examples
@@ -228,9 +267,49 @@ claude gosu:review  # Automatically focuses on git changes
 # Full codebase review (periodic)
 git stash && claude gosu:review  # Reviews entire codebase
 
+# Cross-session workflow with persistence
+claude gosu:review               # Create review file
+# ... session ends ...
+claude gosu:work                 # Resume code quality fixes later
+# ... continue work ...
+claude gosu:work                 # Resume again until all issues fixed
+
 # Combined with security review
 claude gosu:review && claude gosu:security
 ```
+
+### Issue Resolution & File Management
+The review command automatically manages review files throughout the improvement lifecycle:
+
+**Automatic Progress Updates:**
+```bash
+# As issues are fixed, review file is updated in real-time
+- [x] Fix circular dependency in auth module - Fixed: 2024-07-12 15:22:33
+- [x] Add error handling to payment service - Fixed: 2024-07-12 15:35:18
+- [ ] Refactor complex validation function (complexity: 15)
+```
+
+**Quality Score Tracking:**
+```bash
+# Quality improvements tracked over time
+Code Quality Score: B+ → A- (Improved from 78% to 87%)
+High Priority Issues: 3 → 0 (All resolved)
+Medium Priority Issues: 12 → 3 (9 resolved)
+```
+
+**Automatic Cleanup:**
+```bash
+# When all issues reach resolution
+🎉 Code quality improvements completed successfully!
+📊 Quality Score improved from B+ to A-
+🗑️ Cleaning up completed review file: .gosu/review-20240712_151045.md
+✅ Review file deleted - code quality improvements complete
+```
+
+**Manual Review Management:**
+- **Modify Review**: Update findings and save changes
+- **Cancel Review**: Delete review file and stop work
+- **Selective Fixes**: Choose specific issues to address
 
 ### Git Integration Benefits
 The command intelligently uses git to:
@@ -255,8 +334,27 @@ The command intelligently uses git to:
 
 ## Related Commands
 
+- [`gosu:init`](./init.md) - Initialize workspace for persistent task management (recommended first step)
+- [`gosu:work`](./work.md) - Resume work on saved review files across sessions
+- [`gosu:plan`](./plan.md) - Feature planning that can be followed by quality review
 - [`gosu:security`](./security.md) - Security-focused analysis that complements code quality review
-- Use both commands together for comprehensive code health assessment
+
+### Complete Quality Assurance Workflow
+```bash
+# Initialize workspace
+claude gosu:init
+
+# Review → Fix → Secure workflow
+claude gosu:review           # Analyze code quality issues
+claude gosu:work             # Resume fixing issues across sessions
+claude gosu:security         # Validate security after improvements
+
+# Or integrate with feature development
+claude gosu:plan "feature"   # Plan implementation
+claude gosu:work             # Implement feature
+claude gosu:review           # Review implemented code
+claude gosu:security         # Security validation
+```
 
 ## Support
 

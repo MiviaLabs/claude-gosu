@@ -184,10 +184,58 @@ For each finding:
 - **Tooling Suggestions**: Linters, formatters, analysis tools
 - **Team Standards**: Coding conventions and guidelines
 
-## Phase 5: Code Review Report & User Confirmation
+## Phase 5: Code Review Report & File Persistence
 
-### Code Quality Assessment Completion
+### Code Quality Assessment Completion & Memory Persistence
 After completing the comprehensive code review:
+
+**CRITICAL**: Before presenting the findings, check if `.gosu` directory exists and save the review to a file.
+
+```bash
+# Check if .gosu directory exists, if not, skip file creation
+if [ -d ".gosu" ]; then
+  TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+  REVIEW_FILE=".gosu/review-${TIMESTAMP}.md"
+  
+  # Save the complete review to file for persistent memory
+  cat > "$REVIEW_FILE" << 'EOF'
+# Code Quality Review Report - [Project Name]
+
+**Created:** $(date)
+**Status:** Review Complete - Awaiting User Approval
+**File ID:** review-${TIMESTAMP}
+**Quality Score:** [A-F]
+
+## Executive Summary
+- Technology Stack: [Detected stack]
+- Review Scope: [Files reviewed]
+- Total Issues Found: [Count by priority]
+- Most Critical Issues: [Top 5]
+
+## Detailed Findings
+
+### HIGH PRIORITY (Fix Immediately)
+- [ ] Issue 1: [Description] - File: [location]
+- [ ] Issue 2: [Description] - File: [location]
+
+### MEDIUM PRIORITY (Fix This Sprint)
+- [ ] Issue 1: [Description] - File: [location]
+- [ ] Issue 2: [Description] - File: [location]
+
+### LOW PRIORITY (Fix When Possible)
+- [ ] Issue 1: [Description] - File: [location]
+- [ ] Issue 2: [Description] - File: [location]
+
+## Code Quality Recommendations
+[Immediate actions and improvements]
+
+## Implementation Progress
+[Space for tracking fix progress]
+EOF
+  
+  echo "📋 Review saved to: $REVIEW_FILE"
+fi
+```
 
 1. **Present Complete Code Review Report** including:
    - Executive summary with issue counts and quality score
@@ -203,6 +251,7 @@ After completing the comprehensive code review:
    CODE REVIEW COMPLETE
    
    Code Quality Score: [A-F]
+   Review File: .gosu/review-[TIMESTAMP].md (if .gosu directory exists)
    
    Found [X] code quality issues:
    - [X] High priority issues (fix immediately)
@@ -212,13 +261,38 @@ After completing the comprehensive code review:
    Would you like me to proceed with implementing fixes for the code quality issues found?
    
    Options:
-   1. Yes - Create todo list and begin implementing high priority fixes
-   2. No - Stop here, review only
+   1. Yes - Follow the saved review and begin implementing high priority fixes
+   2. No - Stop here, review only (review saved for later use with gosu:work)
    3. Selective - Let me choose which issues to fix
    4. High Priority Only - Fix only critical issues
+   5. Modify Review - Adjust the findings and update the saved file
+   6. Cancel Review - Delete the review file and stop
    ```
 
 3. **Wait for User Response** before proceeding to Phase 6
+
+### Review Refinement Handling
+
+If user chooses "Modify Review", update the saved review file:
+```bash
+# Update review file with refinements
+if [ -f "$REVIEW_FILE" ]; then
+  cp "$REVIEW_FILE" "${REVIEW_FILE}.backup"
+  # Update the review content based on user feedback
+  # Add refinement log
+  echo "\n## Review Refinements\n- Refined: $(date) - [Refinement details]" >> "$REVIEW_FILE"
+fi
+```
+
+If user chooses "Cancel Review", delete the review file:
+```bash
+# Cancel review and clean up file
+if [ -f "$REVIEW_FILE" ]; then
+  echo "🗑️ Canceling review and deleting file: $REVIEW_FILE"
+  rm "$REVIEW_FILE"
+  echo "❌ Review canceled and file deleted"
+fi
+```
 
 ## Phase 6: Multi-Agent Implementation Strategy (Only if User Confirms)
 
@@ -246,7 +320,17 @@ When user approves fixes, first determine the optimal implementation strategy:
 - Issues requiring coordinated changes across multiple files
 - Risk of merge conflicts between concurrent improvements
 
-### Step 2: Implementation Execution
+### Step 2: Implementation Execution with Review Tracking
+
+**IMPORTANT**: If implementing, always reference and update the saved review file to track progress.
+
+```bash
+# Update review file with implementation start
+if [ -f "$REVIEW_FILE" ]; then
+  sed -i 's/Status: Review Complete - Awaiting User Approval/Status: Implementation In Progress/' "$REVIEW_FILE"
+  echo "\n## Implementation Log\n- Started: $(date)" >> "$REVIEW_FILE"
+fi
+```
 
 #### Multi-Agent Coordination (If Determined Feasible)
 ```
@@ -272,7 +356,16 @@ Each agent will receive:
 - File modification coordination to prevent conflicts
 
 #### Single Agent Implementation (If Multi-Agent Not Feasible)
-Create prioritized todo list and proceed with sequential fixes:
+Create prioritized todo list and proceed with sequential fixes following the saved review.
+
+**Issue Fix Tracking**: After completing each fix, update the review file:
+```bash
+# Mark completed issues in review file
+sed -i 's/- \[ \] Issue X: Description/- \[x\] Issue X: Description - Fixed: $(date)/' "$REVIEW_FILE"
+echo "- Fixed Issue X: [Description] at $(date)" >> "$REVIEW_FILE"
+```
+
+Prioritized implementation order:
 
 **P0 (High Priority - Fix Immediately)**
 - Critical bugs and logic errors
@@ -316,6 +409,16 @@ Remaining Items: [X] items for future consideration
 - **Testing Verification**: Ensure all tests pass after improvements
 - **Integration Check**: Verify code still functions correctly after changes
 - **Follow-up Actions**: List any remaining code quality recommendations
+
+**File Cleanup**: After successful code quality implementation completion:
+```bash
+# Mark review as completed and clean up
+if [ -f "$REVIEW_FILE" ]; then
+  echo "🗑️ Cleaning up completed review file: $REVIEW_FILE"
+  rm "$REVIEW_FILE"
+  echo "✅ Review file deleted - code quality improvements complete"
+fi
+```
 
 ### If User Chooses "High Priority Only"
 Apply the same multi-agent analysis but focus only on critical issues that could cause system problems.

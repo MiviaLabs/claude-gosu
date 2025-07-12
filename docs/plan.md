@@ -130,6 +130,42 @@ For complex features with many implementation tasks, the command automatically d
 - **Skill Diversity**: Mix of database, API, testing, and integration work
 - **Task Independence**: Implementation tasks can be completed independently
 
+## Persistent Task Management
+
+### Plan File Creation & Storage
+If you've run `gosu:init` to initialize the workspace, your plans are automatically saved for later resumption:
+
+```bash
+# Plan is saved to .gosu directory
+.gosu/plan-20240712_143022.md
+
+# Contains complete plan with:
+- Executive summary and technical analysis
+- Phase-by-phase task breakdown with checkboxes
+- Implementation examples and acceptance criteria
+- Risk assessment and recommendations
+- Real-time progress tracking
+```
+
+### Integration with gosu:work
+Resume planning and implementation across sessions:
+
+```bash
+# Resume saved plan
+claude gosu:work plan-20240712_143022.md
+
+# Or select interactively
+claude gosu:work
+# > 1. plan-20240712_143022.md (Implementation In Progress - 8/12 tasks completed)
+```
+
+### Progress Tracking
+Plan files automatically track implementation progress:
+- **Checkbox states**: `[x]` completed, `[ ]` pending
+- **Phase tracking**: Progress within each implementation phase
+- **Timestamps**: When tasks were completed
+- **Status updates**: Current implementation state
+
 ## Command Options
 
 After the feature planning analysis, you'll be prompted with:
@@ -140,6 +176,7 @@ After the feature planning analysis, you'll be prompted with:
 Feature: User Profile Management
 Complexity: Medium
 Estimated Implementation: 4 phases, 18 tasks
+Plan File: .gosu/plan-20240712_143022.md (if workspace initialized)
 
 Planning Summary:
 • Phase 1: 5 foundation tasks (database, core models)
@@ -150,10 +187,11 @@ Planning Summary:
 Would you like me to proceed with implementing this feature plan?
 
 Options:
-1. Yes - Create todo list and begin implementing Phase 1 (P0 tasks)
-2. No - Stop here, planning only
+1. Yes - Follow the saved plan and begin implementing Phase 1 (P0 tasks)
+2. No - Stop here, planning only (plan saved for later use with gosu:work)
 3. Selective - Let me choose which phases/tasks to implement
-4. Modify Plan - Adjust the plan before implementation
+4. Modify Plan - Adjust the plan and update the saved file
+5. Cancel Plan - Delete the plan file and stop
 ```
 
 ## Output Examples
@@ -268,9 +306,37 @@ claude gosu:plan "notification system"
 # Plan → Review → Security → Implementation
 claude gosu:plan "feature" && claude gosu:review && claude gosu:security
 
-# Planning with selective implementation
-claude gosu:plan "complex feature" --selective
+# Cross-session workflow with persistence
+claude gosu:plan "complex feature"    # Create plan file
+# ... session ends ...
+claude gosu:work                      # Resume implementation later
+# ... continue work ...
+claude gosu:work                      # Resume again until complete
 ```
+
+### Task Completion & File Management
+The plan command automatically manages task files throughout the implementation lifecycle:
+
+**Automatic Progress Updates:**
+```bash
+# As tasks complete, plan file is updated in real-time
+- [x] Create user migration - Completed: 2024-07-12 14:32:15
+- [x] Implement UserProfile entity - Completed: 2024-07-12 14:45:22
+- [ ] Add profile validation service
+```
+
+**Automatic Cleanup:**
+```bash
+# When all tasks reach 100% completion
+🎉 Feature implementation completed successfully!
+🗑️ Cleaning up completed plan file: .gosu/plan-20240712_143022.md
+✅ Plan file deleted - implementation complete
+```
+
+**Manual Plan Management:**
+- **Modify Plan**: Update plan content and save changes
+- **Cancel Plan**: Delete plan file and stop work
+- **Backup Plans**: Previous versions saved before modifications
 
 ### Planning Best Practices
 The command helps ensure:
@@ -299,9 +365,22 @@ The command helps ensure:
 
 ## Related Commands
 
-- [`gosu:security`](./security.md) - Security analysis to validate planned implementations
+- [`gosu:init`](./init.md) - Initialize workspace for persistent task management (recommended first step)
+- [`gosu:work`](./work.md) - Resume work on saved plan files across sessions
 - [`gosu:review`](./review.md) - Code quality review after feature implementation
-- Use together for complete development lifecycle: Plan → Implement → Review → Secure
+- [`gosu:security`](./security.md) - Security analysis to validate planned implementations
+
+### Complete Development Lifecycle
+```bash
+# Initialize workspace
+claude gosu:init
+
+# Plan → Implement → Review → Secure
+claude gosu:plan "feature"   # Create implementation plan
+claude gosu:work             # Resume implementation across sessions
+claude gosu:review           # Review implemented code
+claude gosu:security         # Validate security of implementation
+```
 
 ## Support
 

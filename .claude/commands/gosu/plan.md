@@ -233,9 +233,76 @@ Create clear dependency chains:
 - **Blocking Dependencies**: External dependencies that could delay progress
 - **Risk Mitigation**: Alternative approaches for high-risk dependencies
 
-## Phase 5: Implementation Plan Presentation & User Confirmation
+## Phase 5: Implementation Plan Presentation & File Persistence
 
-### Comprehensive Plan Report
+### Comprehensive Plan Report & Memory Persistence
+Create a detailed implementation plan and save it to `.gosu` directory for persistent memory:
+
+**CRITICAL**: Before presenting the plan, check if `.gosu` directory exists and save the plan to a file.
+
+```bash
+# Check if .gosu directory exists, if not, skip file creation
+if [ -d ".gosu" ]; then
+  TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+  PLAN_FILE=".gosu/plan-${TIMESTAMP}.md"
+  
+  # Save the complete plan to file for persistent memory
+  cat > "$PLAN_FILE" << 'EOF'
+# Feature Implementation Plan - [Feature Name]
+
+**Created:** $(date)
+**Status:** Planning Complete - Awaiting User Approval
+**File ID:** plan-${TIMESTAMP}
+
+## Executive Summary
+[Feature overview and scope]
+[Total estimated complexity and timeline]
+[Key technical decisions and rationale]
+[Resource requirements and dependencies]
+
+## Technical Architecture
+[How the feature fits into existing architecture]
+[New components and their relationships]
+[Database schema changes and impact]
+[API design and integration points]
+
+## Detailed Implementation Phases
+[Phase-by-phase breakdown with tasks and subtasks]
+[Priority classification and dependencies]
+[Implementation examples and code patterns]
+[Testing strategy for each phase]
+
+## Risk Assessment
+[Potential challenges and blockers]
+[Mitigation strategies]
+[Alternative implementation approaches]
+[Integration complexity analysis]
+
+## Task Tracking
+### Phase 1: Foundation
+- [ ] Task 1: [Description]
+- [ ] Task 2: [Description]
+
+### Phase 2: Core Feature
+- [ ] Task 1: [Description]
+- [ ] Task 2: [Description]
+
+### Phase 3: Integration
+- [ ] Task 1: [Description]
+- [ ] Task 2: [Description]
+
+### Phase 4: Testing & Documentation
+- [ ] Task 1: [Description]
+- [ ] Task 2: [Description]
+
+## Implementation Notes
+[Space for implementation progress and notes]
+EOF
+  
+  echo "📝 Plan saved to: $PLAN_FILE"
+fi
+```
+
 Present a detailed implementation plan including:
 
 1. **Executive Summary**
@@ -262,6 +329,29 @@ Present a detailed implementation plan including:
    - Alternative implementation approaches
    - Integration complexity analysis
 
+### Plan Refinement Handling
+
+If user chooses "Modify Plan", update the saved plan file:
+```bash
+# Update plan file with refinements
+if [ -f "$PLAN_FILE" ]; then
+  cp "$PLAN_FILE" "${PLAN_FILE}.backup"
+  # Update the plan content based on user feedback
+  # Add refinement log
+  echo "\n## Plan Refinements\n- Refined: $(date) - [Refinement details]" >> "$PLAN_FILE"
+fi
+```
+
+If user chooses "Cancel Plan", delete the plan file:
+```bash
+# Cancel plan and clean up file
+if [ -f "$PLAN_FILE" ]; then
+  echo "🗑️ Canceling plan and deleting file: $PLAN_FILE"
+  rm "$PLAN_FILE"
+  echo "❌ Plan canceled and file deleted"
+fi
+```
+
 ### User Confirmation & Implementation Options
 
 **CRITICAL**: Always stop and ask for user approval before proceeding with implementation.
@@ -272,6 +362,7 @@ FEATURE PLANNING COMPLETE
 Feature: [Feature Name]
 Complexity: [High/Medium/Low]
 Estimated Implementation: [X phases, Y tasks]
+Plan File: .gosu/plan-[TIMESTAMP].md (if .gosu directory exists)
 
 Planning Summary:
 " Phase 1: [X] foundation tasks (database, core models)
@@ -282,10 +373,11 @@ Planning Summary:
 Would you like me to proceed with implementing this feature plan?
 
 Options:
-1. Yes - Create todo list and begin implementing Phase 1 (P0 tasks)
-2. No - Stop here, planning only
+1. Yes - Follow the saved plan and begin implementing Phase 1 (P0 tasks)
+2. No - Stop here, planning only (plan saved for later use with gosu:work)
 3. Selective - Let me choose which phases/tasks to implement
-4. Modify Plan - Adjust the plan before implementation
+4. Modify Plan - Adjust the plan and update the saved file
+5. Cancel Plan - Delete the plan file and stop
 ```
 
 ## Phase 6: Multi-Agent Implementation Strategy (Only if User Confirms)
@@ -314,7 +406,17 @@ When user approves implementation, determine optimal execution strategy:
 - Feature requiring careful orchestration across multiple existing modules
 - High risk of conflicts between concurrent implementations
 
-### Implementation Execution
+### Implementation Execution with Plan Tracking
+
+**IMPORTANT**: If implementing, always reference and update the saved plan file to track progress.
+
+```bash
+# Update plan file with implementation start
+if [ -f "$PLAN_FILE" ]; then
+  sed -i 's/Status: Planning Complete - Awaiting User Approval/Status: Implementation In Progress/' "$PLAN_FILE"
+  echo "\n## Implementation Log\n- Started: $(date)" >> "$PLAN_FILE"
+fi
+```
 
 #### Multi-Agent Coordination (If Determined Feasible)
 ```
@@ -335,7 +437,14 @@ Each agent will receive:
 ```
 
 #### Single Agent Implementation (If Multi-Agent Not Feasible)
-Create prioritized todo list and proceed with sequential implementation following the detailed plan.
+Create prioritized todo list and proceed with sequential implementation following the saved plan.
+
+**Task Completion Tracking**: After completing each task, update the plan file:
+```bash
+# Mark completed tasks in plan file
+sed -i 's/- \[ \] Task X: Description/- \[x\] Task X: Description - Completed: $(date)/' "$PLAN_FILE"
+echo "- Completed Task X: [Description] at $(date)" >> "$PLAN_FILE"
+```
 
 ### Implementation Verification & Summary
 Once implementation is complete:
@@ -354,6 +463,16 @@ Total Implementation: [X] tasks completed
 Code Quality: Maintains project standards
 Test Coverage: [X]% coverage added
 Documentation: Updated API docs and README
+```
+
+**File Cleanup**: After successful implementation completion:
+```bash
+# Mark plan as completed and clean up
+if [ -f "$PLAN_FILE" ]; then
+  echo "🗑️ Cleaning up completed plan file: $PLAN_FILE"
+  rm "$PLAN_FILE"
+  echo "✅ Plan file deleted - implementation complete"
+fi
 ```
 
 ## Advanced Planning Features

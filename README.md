@@ -8,9 +8,11 @@ Gosu is a collection of advanced Claude Code commands for comprehensive code ana
 
 | Command | Description | Documentation |
 |---------|-------------|---------------|
-| `gosu:security` | Comprehensive cybersecurity analysis and vulnerability fixes | [Details](./docs/security.md) |
-| `gosu:review` | Code quality review with intelligent improvements | [Details](./docs/review.md) |
+| `gosu:init` | Initialize workspace for persistent task management | [Details](./docs/init.md) |
 | `gosu:plan` | Comprehensive feature planning with implementation roadmaps | [Details](./docs/plan.md) |
+| `gosu:review` | Code quality review with intelligent improvements | [Details](./docs/review.md) |
+| `gosu:security` | Comprehensive cybersecurity analysis and vulnerability fixes | [Details](./docs/security.md) |
+| `gosu:work` | Resume work on previously saved tasks | [Details](./docs/work.md) |
 
 ## Quick Start
 
@@ -23,14 +25,20 @@ claude gosu:<command>
 ### Basic Usage Examples
 
 ```bash
-# Security audit of your codebase
-claude gosu:security
+# Initialize workspace (first time setup)
+claude gosu:init
+
+# Feature planning and implementation
+claude gosu:plan "user profile management with avatar upload"
 
 # Code quality review
 claude gosu:review
 
-# Feature planning and implementation
-claude gosu:plan "user profile management with avatar upload"
+# Security audit of your codebase
+claude gosu:security
+
+# Resume any saved task
+claude gosu:work
 ```
 
 ## Key Features
@@ -78,24 +86,32 @@ When prompted after analysis, you can choose:
 
 ### Workflow Integration
 ```bash
+# First time setup
+claude gosu:init
+
+# Planning new features
+claude gosu:plan "real-time notifications system"
+
 # Before committing changes
 claude gosu:review
 
 # Before production deployment
 claude gosu:security
 
-# Planning new features
-claude gosu:plan "real-time notifications system"
+# Resume interrupted work
+claude gosu:work
 
-# Complete development cycle
-claude gosu:plan "feature" && claude gosu:review && claude gosu:security
+# Complete development cycle with persistence
+claude gosu:init && claude gosu:plan "feature" && claude gosu:review && claude gosu:security
 ```
 
 ### When to Use Each Command
 
-- **Security (`gosu:security`)**: Before deployments, after adding user input features, compliance audits
-- **Review (`gosu:review`)**: Before PRs, after refactoring, regular code quality maintenance
+- **Init (`gosu:init`)**: First time setup, enable persistent task management
 - **Plan (`gosu:plan`)**: Before implementing new features, architectural changes, complex functionality
+- **Review (`gosu:review`)**: Before PRs, after refactoring, regular code quality maintenance
+- **Security (`gosu:security`)**: Before deployments, after adding user input features, compliance audits
+- **Work (`gosu:work`)**: Resume interrupted tasks, continue work across sessions
 
 ## Advanced Features
 
@@ -113,6 +129,54 @@ Agent Distribution:
 ```
 
 Each agent works independently with specific expertise, then provides a coordinated summary of all improvements.
+
+## Persistent Task Files
+
+After initialization with `gosu:init`, task files are saved in the `.gosu` directory:
+
+```
+.gosu/
+├── plan-20240712_143022.md      # Feature implementation plan
+├── review-20240712_151045.md    # Code quality review
+└── security-20240712_160315.md  # Security audit report
+```
+
+**Task File Features:**
+- **Checkbox progress tracking** - `[x]` completed, `[ ]` pending
+- **Implementation notes** - Progress logs and timestamps
+- **Status indicators** - Current phase and completion state
+- **Context preservation** - Full analysis and implementation details
+
+**Resume Examples:**
+```bash
+# List all available tasks
+claude gosu:work
+
+# Resume specific task types
+claude gosu:work plan-20240712_143022.md     # Continue feature implementation
+claude gosu:work review-20240712_151045.md   # Continue code quality fixes
+claude gosu:work security-20240712_160315.md # Continue security remediation
+```
+
+**Cross-Session Workflow:**
+```bash
+# Start feature development
+claude gosu:plan "user authentication"  # Create plan
+# ... session ends ...
+
+# Resume later
+claude gosu:work                         # Resume planning/implementation
+claude gosu:review                       # Start code review  
+# ... session ends ...
+
+# Continue quality improvements
+claude gosu:work                         # Resume review fixes
+claude gosu:security                     # Security audit
+# ... session ends ...
+
+# Finish security work
+claude gosu:work                         # Resume security fixes
+```
 
 ## Support
 

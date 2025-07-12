@@ -101,6 +101,42 @@ For complex codebases with many security issues, the command automatically deplo
 - **Technology Diversity**: Multiple languages/frameworks requiring different expertise
 - **Issue Independence**: Vulnerabilities can be fixed independently without conflicts
 
+## Persistent Task Management
+
+### Security Report Creation & Storage
+If you've run `gosu:init` to initialize the workspace, your security audits are automatically saved for later resumption:
+
+```bash
+# Security report is saved to .gosu directory
+.gosu/security-20240712_160315.md
+
+# Contains complete security analysis with:
+- Executive summary and security posture assessment
+- Detailed vulnerability findings by severity level
+- Technology-specific security recommendations
+- Compliance status and remediation roadmap
+- Real-time fix progress tracking
+```
+
+### Integration with gosu:work
+Resume security remediation across sessions:
+
+```bash
+# Resume saved security work
+claude gosu:work security-20240712_160315.md
+
+# Or select interactively
+claude gosu:work
+# > 3. security-20240712_160315.md (Implementation In Progress - 3/8 vulnerabilities fixed)
+```
+
+### Progress Tracking
+Security files automatically track remediation progress:
+- **Checkbox states**: `[x]` fixed, `[ ]` pending
+- **Severity tracking**: Progress within each severity level (Critical → High → Medium → Low)
+- **Timestamps**: When vulnerabilities were resolved
+- **Security posture improvements**: Before/after security rating
+
 ## Command Options
 
 After the security analysis, you'll be prompted with:
@@ -108,18 +144,22 @@ After the security analysis, you'll be prompted with:
 ```
 🔒 SECURITY REVIEW COMPLETE
 
+Security File: .gosu/security-20240712_160315.md (if workspace initialized)
+
 Found 12 security issues:
 - 2 Critical vulnerabilities
 - 4 High priority issues  
 - 5 Medium priority issues
 - 1 Low priority issue
 
-Would you like me to proceed with implementing fixes?
+Would you like me to proceed with implementing fixes for the security vulnerabilities found?
 
 Options:
-1. Yes - Create todo list and begin implementing critical fixes
-2. No - Stop here, review only
+1. Yes - Follow the saved security report and begin implementing critical fixes
+2. No - Stop here, review only (report saved for later use with gosu:work)
 3. Selective - Let me choose which issues to fix
+4. Modify Report - Adjust the findings and update the saved file
+5. Cancel Security Review - Delete the security file and stop
 ```
 
 ## Output Examples
@@ -187,9 +227,50 @@ claude gosu:security
 # After feature development
 git add . && claude gosu:security
 
+# Cross-session security workflow with persistence
+claude gosu:security             # Create security report
+# ... session ends ...
+claude gosu:work                 # Resume vulnerability fixes later
+# ... continue remediation ...
+claude gosu:work                 # Resume again until all critical issues fixed
+
 # Security-focused development cycle
 claude gosu:security --selective
 ```
+
+### Vulnerability Remediation & File Management
+The security command automatically manages security files throughout the remediation lifecycle:
+
+**Automatic Progress Updates:**
+```bash
+# As vulnerabilities are fixed, security file is updated in real-time
+- [x] Fix SQL injection in user search - Fixed: 2024-07-12 16:45:22
+- [x] Secure JWT configuration with env variables - Fixed: 2024-07-12 16:52:18
+- [ ] Implement rate limiting on auth endpoints
+```
+
+**Security Posture Tracking:**
+```bash
+# Security improvements tracked over time
+Security Posture: C+ → A- (Improved from 65% to 87%)
+Critical Vulnerabilities: 2 → 0 (All resolved)
+High Priority Issues: 4 → 1 (3 resolved)
+```
+
+**Automatic Cleanup:**
+```bash
+# When all critical vulnerabilities are resolved
+🎉 Security improvements completed successfully!
+🔒 Security Posture improved from C+ to A-
+🗑️ Cleaning up completed security file: .gosu/security-20240712_160315.md
+✅ Security file deleted - vulnerability remediation complete
+```
+
+**Manual Security Management:**
+- **Modify Report**: Update findings and save changes
+- **Cancel Security Review**: Delete security file and stop work
+- **Selective Remediation**: Choose specific vulnerabilities to address
+- **Priority-Based Fixes**: Focus on critical/high severity issues only
 
 ## Compliance & Standards
 
@@ -201,8 +282,28 @@ The security command helps ensure compliance with:
 
 ## Related Commands
 
+- [`gosu:init`](./init.md) - Initialize workspace for persistent task management (recommended first step)
+- [`gosu:work`](./work.md) - Resume work on saved security files across sessions
+- [`gosu:plan`](./plan.md) - Feature planning that should include security considerations
 - [`gosu:review`](./review.md) - Code quality review that includes security-related quality issues
-- Use both commands together for comprehensive code health assessment
+
+### Complete Security Workflow
+```bash
+# Initialize workspace
+claude gosu:init
+
+# Security-first development lifecycle
+claude gosu:plan "secure feature"   # Plan with security in mind
+claude gosu:work                    # Implement with security practices
+claude gosu:review                  # Review for quality and security issues
+claude gosu:security                # Comprehensive security audit
+claude gosu:work                    # Resume security fixes across sessions
+
+# Security remediation workflow
+claude gosu:security                # Analyze security vulnerabilities
+claude gosu:work                    # Fix critical vulnerabilities first
+claude gosu:review                  # Ensure fixes maintain code quality
+```
 
 ## Support
 

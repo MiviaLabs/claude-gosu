@@ -4,11 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Claude Gosu is a collection of advanced Claude Code commands for comprehensive code analysis and improvement. This is a command package that provides three main commands:
+Claude Gosu is a collection of advanced Claude Code commands for comprehensive code analysis and improvement. This is a command package that provides five main commands:
 
-- `gosu:security` - Comprehensive cybersecurity analysis and vulnerability fixes
-- `gosu:review` - Code quality review with intelligent improvements  
+- `gosu:init` - Initialize workspace for persistent task management
 - `gosu:plan` - Feature planning with implementation roadmaps
+- `gosu:review` - Code quality review with intelligent improvements  
+- `gosu:security` - Comprehensive cybersecurity analysis and vulnerability fixes
+- `gosu:work` - Resume work on previously saved tasks
 
 ## Architecture
 
@@ -27,9 +29,11 @@ Commands automatically determine when to deploy multiple specialized agents base
 - Task independence and technology diversity
 
 ### Documentation Structure
-- `/docs/security.md` - Detailed security command documentation
-- `/docs/review.md` - Code quality review command documentation  
+- `/docs/init.md` - Workspace initialization command documentation
 - `/docs/plan.md` - Feature planning command documentation
+- `/docs/review.md` - Code quality review command documentation  
+- `/docs/security.md` - Detailed security command documentation
+- `/docs/work.md` - Task resumption command documentation
 - `README.md` - Main project documentation and usage examples
 
 ## Development Commands
@@ -48,6 +52,8 @@ All commands automatically detect and adapt to any programming language or techn
 - Commands always analyze first, then stop for user confirmation
 - No changes made without explicit user approval
 - Multiple implementation options: Yes/No/Selective/High Priority Only
+- Persistent task management with cross-session continuity
+- Automatic progress tracking and file cleanup
 
 ### Technology-Specific Analysis
 Each command adapts its analysis patterns based on detected stack:
@@ -58,18 +64,65 @@ Each command adapts its analysis patterns based on detected stack:
 ## Command Usage Patterns
 
 ```bash
-# Security audit
-claude gosu:security
-
-# Code quality review  
-claude gosu:review
+# Initialize workspace (first time)
+claude gosu:init
 
 # Feature planning
 claude gosu:plan "feature description"
 
-# Combined workflow
-claude gosu:plan "feature" && claude gosu:review && claude gosu:security
+# Code quality review  
+claude gosu:review
+
+# Security audit
+claude gosu:security
+
+# Resume any saved task
+claude gosu:work
+
+# Combined workflow with persistence
+claude gosu:init && claude gosu:plan "feature" && claude gosu:review && claude gosu:security
+
+# Cross-session workflow
+claude gosu:plan "feature"  # Start and save progress
+# ... session ends ...
+claude gosu:work             # Resume exactly where left off
 ```
 
+## Persistent Task Management
+
+### Workspace Initialization
+Commands support persistent task management through the `.gosu` directory:
+```bash
+# Initialize workspace
+claude gosu:init
+# Creates .gosu/ directory and updates .gitignore
+```
+
+### Task File Structure
+After initialization, commands create persistent task files:
+```
+.gosu/
+├── plan-YYYYMMDD_HHMMSS.md      # Feature implementation plans
+├── review-YYYYMMDD_HHMMSS.md    # Code quality reviews
+└── security-YYYYMMDD_HHMMSS.md  # Security audit reports
+```
+
+### Task Resumption
+Work can be resumed across sessions with full context:
+```bash
+# Resume any saved task
+claude gosu:work
+
+# Resume specific task
+claude gosu:work plan-20240712_143022.md
+```
+
+### Progress Tracking
+Task files include:
+- **Checkbox progress tracking** (`[x]` completed, `[ ]` pending)
+- **Implementation notes** and timestamps
+- **Status indicators** and completion state
+- **Automatic cleanup** when tasks reach 100% completion
+
 ## Project Type
-This is a command definition package, not a traditional application. The commands are designed to be invoked within other codebases to provide analysis and improvement capabilities.
+This is a command definition package, not a traditional application. The commands are designed to be invoked within other codebases to provide analysis and improvement capabilities with optional persistent task management.
