@@ -182,6 +182,12 @@ claude gosu:security                     # Security audit
 claude gosu:work                         # Resume security fixes
 ```
 
+## Examples
+
+See real-world examples of command outputs and task files:
+
+- **[Feature Planning Example](./examples/plan-20250713_110206.md)** - Complete feature implementation plan with progress tracking
+
 ## Support
 
 For detailed information about each command, see the individual documentation files linked above.
