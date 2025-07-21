@@ -12,6 +12,7 @@ Gosu is a collection of advanced Claude Code commands for comprehensive code ana
 | `gosu:plan` | Comprehensive feature planning with implementation roadmaps | [Details](./docs/plan.md) |
 | `gosu:review` | Code quality review with intelligent improvements | [Details](./docs/review.md) |
 | `gosu:security` | Comprehensive cybersecurity analysis and vulnerability fixes | [Details](./docs/security.md) |
+| `gosu:summary` | Generate comprehensive work summary reports with team productivity analysis | [Details](./docs/summary.md) |
 | `gosu:work` | Resume work on previously saved tasks | [Details](./docs/work.md) |
 
 ## Quick Start
@@ -38,6 +39,11 @@ claude gosu:review
 
 # Security audit of your codebase
 claude gosu:security
+
+# Generate work summary report (last 7 days)
+claude gosu:summary
+# OR for custom time period
+claude gosu:summary 30
 
 # Resume any saved task
 claude gosu:work
@@ -107,6 +113,9 @@ claude gosu:work
 
 # Complete development cycle with persistence
 claude gosu:init && claude gosu:plan "feature" && claude gosu:review && claude gosu:security
+
+# Generate team productivity report
+claude gosu:summary 14
 ```
 
 ### When to Use Each Command
@@ -115,6 +124,7 @@ claude gosu:init && claude gosu:plan "feature" && claude gosu:review && claude g
 - **Plan (`gosu:plan`)**: Before implementing new features, architectural changes, complex functionality
 - **Review (`gosu:review`)**: Before PRs, after refactoring, regular code quality maintenance
 - **Security (`gosu:security`)**: Before deployments, after adding user input features, compliance audits
+- **Summary (`gosu:summary`)**: Team productivity reports, sprint reviews, manager updates
 - **Work (`gosu:work`)**: Resume interrupted tasks, continue work across sessions
 
 ## Advanced Features
