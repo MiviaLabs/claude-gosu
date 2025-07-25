@@ -1,6 +1,6 @@
 {
   "name": "claude-gosu",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Collection of advanced Claude Code commands for comprehensive code analysis and improvement. These commands provide expert-level security auditing and code quality review with intelligent multi-agent coordination",
   "homepage": "https://github.com/MiviaLabs/claude-gosu#readme",
   "bugs": {
