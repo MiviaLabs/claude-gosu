@@ -9,9 +9,11 @@ Gosu is a collection of advanced Claude Code commands for comprehensive code ana
 | Command | Description | Documentation |
 |---------|-------------|---------------|
 | `gosu:init` | Initialize workspace for persistent task management | [Details](./docs/init.md) |
+| `gosu:spec` | Professional PM/BA/Tech Lead guided feature specification creation | [Details](./docs/spec.md) |
 | `gosu:plan` | Comprehensive feature planning with implementation roadmaps | [Details](./docs/plan.md) |
 | `gosu:review` | Code quality review with intelligent improvements | [Details](./docs/review.md) |
 | `gosu:security` | Comprehensive cybersecurity analysis and vulnerability fixes | [Details](./docs/security.md) |
+| `gosu:jira` | JIRA issue management through MCP integration | [Details](./docs/jira.md) |
 | `gosu:summary` | Generate comprehensive work summary reports with team productivity analysis | [Details](./docs/summary.md) |
 | `gosu:work` | Resume work on previously saved tasks | [Details](./docs/work.md) |
 
@@ -29,6 +31,11 @@ claude gosu:<command>
 # Initialize workspace (first time setup)
 claude gosu:init
 
+# Feature specification creation
+claude gosu:spec "user profile management with avatar upload"
+# OR interactive mode
+claude gosu:spec
+
 # Feature planning and implementation
 claude gosu:plan "user profile management with avatar upload"
 # OR interactive mode
@@ -40,6 +47,11 @@ claude gosu:review
 # Security audit of your codebase
 claude gosu:security
 
+# JIRA issue management
+claude gosu:jira "create task 'Fix login bug' in PROJ"
+# OR interactive mode for guided operations
+claude gosu:jira
+
 # Generate work summary report (last 7 days)
 claude gosu:summary
 # OR for custom time period
@@ -48,6 +60,7 @@ claude gosu:summary 30
 # Resume any saved task
 claude gosu:work
 # OR resume specific task
+claude gosu:work spec-20240712_143022.md
 claude gosu:work plan-20240712_143022.md
 ```
 
@@ -67,6 +80,12 @@ Commands automatically determine when to use multiple agents based on:
 - File distribution across the codebase
 - Task independence
 - Technology diversity
+
+### Professional Expertise
+The `gosu:spec` command features Claude Code acting as your virtual:
+- **Project Manager** - Scope definition and resource planning
+- **Business Analyst** - Requirements gathering and success criteria
+- **Technical Lead** - Architecture assessment and feasibility analysis
 
 ### User Control
 All commands follow the same safe workflow:
@@ -99,6 +118,9 @@ When prompted after analysis, you can choose:
 # First time setup
 claude gosu:init
 
+# Feature specification creation
+claude gosu:spec "real-time notifications system"
+
 # Planning new features
 claude gosu:plan "real-time notifications system"
 
@@ -108,11 +130,14 @@ claude gosu:review
 # Before production deployment
 claude gosu:security
 
+# JIRA integration for issue tracking
+claude gosu:jira "create task 'Implement notifications' in PROJ"
+
 # Resume interrupted work
 claude gosu:work
 
 # Complete development cycle with persistence
-claude gosu:init && claude gosu:plan "feature" && claude gosu:review && claude gosu:security
+claude gosu:init && claude gosu:spec "feature" && claude gosu:plan "feature" && claude gosu:review && claude gosu:security
 
 # Generate team productivity report
 claude gosu:summary 14
@@ -121,9 +146,11 @@ claude gosu:summary 14
 ### When to Use Each Command
 
 - **Init (`gosu:init`)**: First time setup, enable persistent task management
+- **Spec (`gosu:spec`)**: Professional specification creation with PM/BA/Tech Lead guidance
 - **Plan (`gosu:plan`)**: Before implementing new features, architectural changes, complex functionality
 - **Review (`gosu:review`)**: Before PRs, after refactoring, regular code quality maintenance
 - **Security (`gosu:security`)**: Before deployments, after adding user input features, compliance audits
+- **JIRA (`gosu:jira`)**: Issue management, task creation, project tracking, team collaboration
 - **Summary (`gosu:summary`)**: Team productivity reports, sprint reviews, manager updates
 - **Work (`gosu:work`)**: Resume interrupted tasks, continue work across sessions
 
@@ -150,6 +177,7 @@ After initialization with `gosu:init`, task files are saved in the `.gosu` direc
 
 ```
 .gosu/
+├── spec-20240712_143022.md      # Feature specification document
 ├── plan-20240712_143022.md      # Feature implementation plan
 ├── review-20240712_151045.md    # Code quality review
 └── security-20240712_160315.md  # Security audit report
@@ -167,6 +195,7 @@ After initialization with `gosu:init`, task files are saved in the `.gosu` direc
 claude gosu:work
 
 # Resume specific task types
+claude gosu:work spec-20240712_143022.md     # Continue feature specification
 claude gosu:work plan-20240712_143022.md     # Continue feature implementation
 claude gosu:work review-20240712_151045.md   # Continue code quality fixes
 claude gosu:work security-20240712_160315.md # Continue security remediation
@@ -175,10 +204,15 @@ claude gosu:work security-20240712_160315.md # Continue security remediation
 **Cross-Session Workflow:**
 ```bash
 # Start feature development
-claude gosu:plan "user authentication"  # Create plan
+claude gosu:spec "user authentication"  # Create specification
 # ... session ends ...
 
 # Resume later
+claude gosu:work                         # Resume specification work
+claude gosu:plan "user authentication"  # Create implementation plan
+# ... session ends ...
+
+# Continue with development
 claude gosu:work                         # Resume planning/implementation
 claude gosu:review                       # Start code review  
 # ... session ends ...
@@ -191,6 +225,35 @@ claude gosu:security                     # Security audit
 # Finish security work
 claude gosu:work                         # Resume security fixes
 ```
+
+## JIRA MCP Configuration
+
+The gosu commands include comprehensive JIRA MCP integration for seamless issue management through Claude Code.
+
+### Quick Setup
+
+```bash
+# Install JIRA MCP client
+npx -p mcp-remote@latest mcp-remote-client https://mcp.atlassian.com/v1/sse
+
+# Add to Claude Code MCP
+claude mcp add JIRA npx mcp-remote https://mcp.atlassian.com/v1/sse
+```
+
+### Usage Examples
+
+```bash
+# Create a new task
+claude "/gosu:jira create task 'Implement user authentication' in PROJ"
+
+# Search for open issues
+claude "/gosu:jira search issues project = PROJ AND status = Open"
+
+# Add comment to issue
+claude "/gosu:jira add comment to PROJ-123 'Testing completed successfully'"
+```
+
+For comprehensive documentation, configuration options, and advanced usage, see [JIRA MCP Integration Guide](docs/jira-mcp-integration.md).
 
 ## Examples
 
